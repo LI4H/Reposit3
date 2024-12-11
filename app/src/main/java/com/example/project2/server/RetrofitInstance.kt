@@ -24,9 +24,8 @@ object RetrofitInstance {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://try.axxonsoft.com:8000/asip-api/") // Базовый URL
-        .client(client)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
         .build()
-
     val api: ApiService = retrofit.create(ApiService::class.java)
 }

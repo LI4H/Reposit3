@@ -17,6 +17,8 @@ interface ApiService {
         @Query("filter") filter: String? = null
     ): CameraList
 
+
+    //todo
     @GET("live/media/snapshot/{videoSourceId}")
     suspend fun getSnapshot(
         @Path("videoSourceId") videoSourceId: String,

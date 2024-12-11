@@ -21,10 +21,13 @@ class CameraModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
+
                 val videoStream = camera.videoStreams.firstOrNull()?.accessPoint
                     ?: throw Exception("No video stream available")
+                Log.d("CameraModel", "VideoStream URL before cleaning: $videoStream")
                 val bytes = ServerRepository.getSnapshot(videoStream)
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
 
                 _state.value = _state.value.copy(bitmap = bitmap)
             } catch (e: Exception) {

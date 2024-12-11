@@ -8,15 +8,23 @@ import kotlinx.coroutines.flow.flow
 
 object ServerRepository {
 
+
+    //todo
+    suspend fun getSnapshot(videoSourceId: String): ByteArray {
+        //   val cleanedId = videoSourceId.replaceFirst("hosts/", "")
+        // Log.d("ServerRepository", "VideoStream URL after cleaning: $cleanedId")
+        val response = RetrofitInstance.api.getSnapshot(videoSourceId)//todo mody
+
+        if (!response.isSuccessful) {
+            throw RuntimeException("Failed to fetch snapshot: ${response.code()}")
+        }
+
+        return response.body()?.bytes() ?: throw RuntimeException("No image data")
+    }
+
     suspend fun getCameras(): List<Camera>{
         val response = RetrofitInstance.api.getCameras()
         return response.cameras
-    }
-
-    suspend fun getSnapshot(videoSourceId: String): ByteArray {
-        val cleanedId = videoSourceId.replaceFirst("hosts/", "")
-        val response = RetrofitInstance.api.getSnapshot(cleanedId)
-        return response.body()?.bytes() ?: throw RuntimeException("No image data")
     }
 
     fun fetchServerVersion(): Flow<String> = flow {
@@ -25,7 +33,8 @@ object ServerRepository {
     }
 }
 
-
+//
+//
 //    suspend fun fetchCamerasWithSnapshots(): List<CameraWithSnapshot> {
 //        val response = RetrofitInstance.api.getCameras()
 //        val cameras = response.cameras
@@ -37,7 +46,7 @@ object ServerRepository {
 //
 //        return camerasWithSnapshots
 //    }
-
+//
 //
 //    suspend fun getSnapshot(videoSourseId: String): ByteArray{
 //        val vsiFixed = videoSourseId.apply { replaceFirst("hosts/", "") }
@@ -47,7 +56,7 @@ object ServerRepository {
 //            throw RuntimeException("no image data")
 //        return bytes
 //    }
-
+//
 //    private suspend fun getSnapshotUrlForCamera(camera: Camera): String? {
 //        return try {
 //            // получаем snapshotURL для каждой камеры
